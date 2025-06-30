@@ -28,9 +28,19 @@ public class ClientService {
     }
 
     @Transactional(readOnly = true)
-    public APIResponse findById(){
-        return null;
-    }@Transactional(readOnly = true)
+    public APIResponse findById(Long id){
+        try {
+            Client found = clientRepository.findById(id).orElse(null);
+            if (found == null) {
+                return new APIResponse("No se encotro al cliente solicitado", true, HttpStatus.NOT_FOUND);
+            }
+            return new APIResponse("Operación exitosa", found,false, HttpStatus.OK);
+        } catch(Exception ex){
+            ex.printStackTrace();
+            return new APIResponse("No se pudo consultar al cliente", true, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @Transactional(readOnly = true)
     public APIResponse save(){
         return null;
     }@Transactional(readOnly = true)
