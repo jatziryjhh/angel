@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.unidad3.utils.APIResponse;
 
 @RestController
@@ -65,6 +62,29 @@ public class ClientController {
     })
     public ResponseEntity<APIResponse>findById(@PathVariable("id")Long id){
         APIResponse response = clientService.findById(id);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @PostMapping("")
+    @Operation(summary = "Guardar un cliente",description = "Registra la información de un cliente")
+    @ApiResponses(value={
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Registro exitoso del cliente",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "No se pudo consultar al cliente",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
+                    }
+            )
+    })
+    public ResponseEntity<APIResponse> save(@RequestBody Client payload) {
+        APIResponse response = clientService.save(payload);
         return new ResponseEntity<>(response, response.getStatus());
     }
 

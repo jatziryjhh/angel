@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.unidad3.utils.APIResponse;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -40,10 +41,18 @@ public class ClientService {
             return new APIResponse("No se pudo consultar al cliente", true, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @Transactional(readOnly = true)
-    public APIResponse save(){
-        return null;
-    }@Transactional(readOnly = true)
+    @Transactional(rollbackFor = {SQLException.class,Exception.class})
+    public APIResponse save(Client payload) {
+        try {
+            clientRepository.save(payload);
+                return new APIResponse("Operación exitosa",false, HttpStatus.CREATED);
+        } catch(Exception ex){
+            ex.printStackTrace();
+            return new APIResponse("No se pudo guardar al cliente", true, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+   @Transactional(readOnly = true)
     public APIResponse update(){
         return null;
     }
