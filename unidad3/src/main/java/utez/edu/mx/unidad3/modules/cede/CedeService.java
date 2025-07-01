@@ -25,9 +25,14 @@ public class CedeService {
     public APIResponse findById(Long id){
         try{
             Cede found = cedeRepository.findById(id).orElse(null);
-            if()
-        }catch (Exception ex){
+            if(found == null){
+                return new APIResponse("Cede no encontrada",true,HttpStatus.NOT_FOUND);
+            }
 
+            return new APIResponse("Operación existosa",found,false,HttpStatus.OK);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return new APIResponse("No se pudo consultar la cede",true,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -42,7 +47,36 @@ public class CedeService {
 
             return new APIResponse("Operación exitosas",false,HttpStatus.CREATED);
         }catch (Exception ex){
+            ex.printStackTrace();
             return new APIResponse("No se pudo registrar la cede",true,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = {SQLException.class,Exception.class})
+    public APIResponse update(Cede payload){
+        try {
+            if(cedeRepository.findById(payload.getId()).isEmpty()){
+                    return new APIResponse("Cede no encontrada",true,HttpStatus.NOT_FOUND);
+            }
+            cedeRepository.save(payload);
+            return new APIResponse("Operación exitosas",false,HttpStatus.OK);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return new APIResponse("No se pudo actualizar la cede",true,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = {SQLException.class,Exception.class})
+    public APIResponse remove(Cede payload){
+        try {
+            if(cedeRepository.findById(payload.getId()).isEmpty()){
+                return new APIResponse("Cede no encontrada",true,HttpStatus.NOT_FOUND);
+            }
+            cedeRepository.deleteById(payload.getId());
+            return new APIResponse("Operación exitosas",false,HttpStatus.OK);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return new APIResponse("No se pudo eliminar la cede",true,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
