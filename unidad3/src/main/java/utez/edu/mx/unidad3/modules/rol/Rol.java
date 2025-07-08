@@ -2,7 +2,6 @@ package utez.edu.mx.unidad3.modules.rol;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Bean;
 import utez.edu.mx.unidad3.modules.user.BeanUser;
 
 import java.util.List;
@@ -12,18 +11,17 @@ import java.util.List;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id",nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "rol")
     @JsonIgnore
     private List<BeanUser> users;
 
-    public Rol() {
-    }
+    public Rol() {}
 
     public Rol(Long id, String name, List<BeanUser> users) {
         this.id = id;
