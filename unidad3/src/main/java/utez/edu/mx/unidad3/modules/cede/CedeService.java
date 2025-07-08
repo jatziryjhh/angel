@@ -52,38 +52,6 @@ public class CedeService {
         }
     }
 
-    @Transactional(rollbackFor = {SQLException.class, Exception.class})
-    public APIResponse update(Cede payload) {
-        try {
-            if (cedeRepository.findById(payload.getId()).isEmpty()) {
-                return new APIResponse("Cede no encontrada", null, true, HttpStatus.NOT_FOUND);
-            }
-
-            Cede updated = cedeRepository.save(payload);
-            return new APIResponse("Operación exitosa", updated, false, HttpStatus.OK);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return new APIResponse("No se pudo actualizar la cede", null, true, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Transactional(rollbackFor = {SQLException.class, Exception.class})
-    public APIResponse remove(Cede payload) {
-        try {
-            if (cedeRepository.findById(payload.getId()).isEmpty()) {
-                return new APIResponse("Cede no encontrada", null, true, HttpStatus.NOT_FOUND);
-            }
-
-            cedeRepository.deleteById(payload.getId());
-            return new APIResponse("Operación exitosa", null, false, HttpStatus.OK);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return new APIResponse("No se pudo eliminar la cede", null, true, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @Transactional(rollbackFor = {SQLException.class,Exception.class})
     public APIResponse update(Cede payload){
         try {

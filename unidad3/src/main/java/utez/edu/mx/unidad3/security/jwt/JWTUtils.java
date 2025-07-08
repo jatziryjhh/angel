@@ -63,7 +63,7 @@ public class JWTUtils {
                 .setClaims(claims).setSubject(subject) //Aqui la info del usuario
                 .setIssuedAt(new Date(System.currentTimeMillis())) //Aqui cuando se creo el token
                 .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 60 * 10)) //Cunato va a durar
-                .signWith(SignatureAlgorithm.HS512, secretKey) //Aqui lo firmamos
+                .signWith(SignatureAlgorithm.HS256, secretKey) //Aqui lo firmamos
                 .compact(); //Terminamos de comptar el token
     }
 
