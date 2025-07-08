@@ -12,37 +12,75 @@ import java.util.List;
 
 @Service
 public class CedeService {
+
     @Autowired
     private CedeRepository cedeRepository;
 
     @Transactional(readOnly = true)
-    public APIResponse findAll(){
-        List<Cede>list=cedeRepository.findAll();
-        return new APIResponse("Operación exitosa",list,false, HttpStatus.OK);
+    public APIResponse findAll() {
+        List<Cede> list = cedeRepository.findAll();
+        return new APIResponse("Operación exitosa", list, false, HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
-    public APIResponse findById(Long id){
-        try{
+    public APIResponse findById(Long id) {
+        try {
             Cede found = cedeRepository.findById(id).orElse(null);
-            if()
-        }catch (Exception ex){
-
+            if (found == null) {
+                return new APIResponse("Cede no encontrada", null, true, HttpStatus.NOT_FOUND);
+            }
+            return new APIResponse("Operación exitosa", found, false, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new APIResponse("No se pudo consultar la cede", null, true, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Transactional(rollbackFor = {SQLException.class, Exception.class})
-    public APIResponse save(Cede payload){
-        try{
+    public APIResponse save(Cede payload) {
+        try {
             payload.setClave("pending...");
-            Cede saved=cedeRepository.save(payload);
+            Cede saved = cedeRepository.save(payload);
 
             saved.setClave(ClaveGenerator.generateCedeClave(saved.getId()));
             cedeRepository.save(saved);
 
-            return new APIResponse("Operación exitosas",false,HttpStatus.CREATED);
-        }catch (Exception ex){
-            return new APIResponse("No se pudo registrar la cede",true,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new APIResponse("Operación exitosa", saved, false, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new APIResponse("No se pudo registrar la cede", null, true, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = {SQLException.class, Exception.class})
+    public APIResponse update(Cede payload) {
+        try {
+            if (cedeRepository.findById(payload.getId()).isEmpty()) {
+                return new APIResponse("Cede no encontrada", null, true, HttpStatus.NOT_FOUND);
+            }
+
+            Cede updated = cedeRepository.save(payload);
+            return new APIResponse("Operación exitosa", updated, false, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new APIResponse("No se pudo actualizar la cede", null, true, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = {SQLException.class, Exception.class})
+    public APIResponse remove(Cede payload) {
+        try {
+            if (cedeRepository.findById(payload.getId()).isEmpty()) {
+                return new APIResponse("Cede no encontrada", null, true, HttpStatus.NOT_FOUND);
+            }
+
+            cedeRepository.deleteById(payload.getId());
+            return new APIResponse("Operación exitosa", null, false, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new APIResponse("No se pudo eliminar la cede", null, true, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
