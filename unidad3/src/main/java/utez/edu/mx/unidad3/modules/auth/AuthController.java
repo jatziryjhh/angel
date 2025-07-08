@@ -1,2 +1,4 @@
-package utez.edu.mx.unidad3.modules.auth;public class AuthController {
+package utez.edu.mx.unidad3.modules.auth;
+
+public class AuthController {
 }
