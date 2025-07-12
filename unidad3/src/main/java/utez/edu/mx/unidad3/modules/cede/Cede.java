@@ -2,6 +2,9 @@ package utez.edu.mx.unidad3.modules.cede;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import utez.edu.mx.unidad3.modules.warehouse.Warehouse;
 
 import java.util.List;
@@ -20,10 +23,19 @@ public class Cede {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Pattern(regexp = "^C[0-9]+-\\d{8}-\\d{4}$",message = "Solamente se aceptan letras")
+    @NotNull(message = "Favor de ingresar los datos")
+    @NotBlank(message = "Favor de no dejar los datos en blanco")
     @Column(name="clave",nullable = false)
     private String clave;
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ][\\sa-zA-ZáéíóúÁÉÍÓÚñÑ]{2,}$",message = "Solamente se aceptan letras")
+    @NotNull(message = "Favor de ingresar los datos")
+    @NotBlank(message = "Favor de no dejar los datos en blanco")
     @Column(name="state",nullable = false)
     private String state;
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ][\\sa-zA-ZáéíóúÁÉÍÓÚñÑ]{2,}$",message = "Solamente se aceptan letras")
+    @NotNull(message = "Favor de ingresar los datos")
+    @NotBlank(message = "Favor de no dejar los datos en blanco")
     @Column(name="city",nullable = false)
     private String city;
 
