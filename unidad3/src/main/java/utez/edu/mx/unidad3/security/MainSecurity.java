@@ -53,6 +53,7 @@ public class MainSecurity {
         return http.build();
     }
 
+
     private CorsConfigurationSource corsRegistry() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("*"));
